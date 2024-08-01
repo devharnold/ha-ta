@@ -1,0 +1,19 @@
+{
+  "name": "ha-ta",
+  "version": "1.0.0",
+  "description": "Node package for my node project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devharnold/ha-ta.git"
+  },
+  "author": "harnold",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devharnold/ha-ta/issues"
+  },
+  "homepage": "https://github.com/devharnold/ha-ta#readme"
+}
