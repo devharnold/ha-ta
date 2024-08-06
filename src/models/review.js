@@ -9,8 +9,8 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-class Reviews extends Model{}
-Reviews.init({
+class Review extends Model{}
+Review.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -21,7 +21,7 @@ Reviews.init({
         allowNull: false,
     },
     title: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(255),
         allowNull: false,
         validate: {
             isUppercase(value) {
@@ -30,6 +30,10 @@ Reviews.init({
                 }
             }
         }
+    },
+    message: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     datetime: {
         type: DataTypes.DATE,
@@ -43,3 +47,6 @@ Reviews.init({
         }
     },
 })
+
+
+model.exports = Reivew;
