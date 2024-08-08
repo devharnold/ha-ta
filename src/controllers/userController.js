@@ -1,50 +1,13 @@
-/**
- * controllers to the { user } model
- * like, get, create, delete
- * 
- * @return: 
- */
+const User = require("../models/models/user");
+const asyncHandler = require("express-async-handler");
 
+// handles user display detail
+exports.user_detial = asyncHandler(async (req, res, next) => {
+    res.send(`Not Implemented: Author detail: ${req.params.id}`);
+});
 
-const user = require('../models/user');
+//handles user details update
+exports.user_update_detail = asyncHandler(async (req, res, next) => {
+    res.send("Not updated: User profile update");
+});
 
-const createUser = async (req, res) => {
-    try {
-        const user = await user.create({
-            username: req.body.username,
-            email: req.body.email,
-            location: req.body.location,
-            phoneNumber: req.body.phoneNumber,
-            password: req.body.password,
-        });
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
-};
-
-const getUser = async (req, res) => {
-    try {
-        const user = await user.getUser({
-            username: req.body.username,
-            email: req.body.email,
-        });
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
-}
-
-const deleteUser = async (req, res) => {
-    try {
-        const user = await user.deleteUser({
-            username: req.body.username,
-            email: req.body.email,
-        });
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
-}
-
-module.exports = { createUser }, { getUser}, { deleteUser }
