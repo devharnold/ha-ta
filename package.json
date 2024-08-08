@@ -18,14 +18,16 @@
   "homepage": "https://github.com/devharnold/ha-ta#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "cli": "^1.0.1",
     "eslint": "^9.8.0",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "sequelize": "^6.37.3"
   },
   "dependencies": {
     "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.11.0",
-    "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2"
   }
 }
