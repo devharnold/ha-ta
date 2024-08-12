@@ -11,18 +11,48 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Flight.belongsTo(models.City, {
+        foreignKey: 'depatureCityId',
+        as: 'depatureCity',
+      });
+
       Flight.hasMany(models.City, {
         foreignKey: 'flightNumber',
         as: 'city'
-      })
+      });
+
+      Flight.belongsTo(models.Airline, {
+        foreignKey: 'airlineId',
+        as: 'airline'
+      });
+
     }
   }
   Flight.init({
-    flightNumber: DataTypes.INTEGER,
-    departureCityId: DataTypes.INTEGER,
-    arrivalCityId: DataTypes.INTEGER,
-    departureTime: DataTypes.DATE,
-    arrivalTime: DataTypes.DATE
+    airlineName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    depatureCityName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    depatureID: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }, // airport abbreviation -eg JKIA
+    departureTime: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    arrivalCityName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    arrivalId: {
+      type: DataTypes.STRING,
+      allowNull: true
+    }, // airport abreviation - eg CDG
   }, {
     sequelize,
     modelName: 'Flight',
