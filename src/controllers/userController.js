@@ -1,5 +1,5 @@
-const { User } = require("../models/models/user");
-const asyncHandler = require("express-async-handler");
+const { User } = require("../models/models/user"); //importing
+// const asyncHandler = require("express-async-handler");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -32,7 +32,7 @@ exports.registerUser = async(req, res) => {
 
 exports.userLogin = async(req, res) => {
     try {
-        const { email, password } = req.body;
+        const { username, password } = req.body;
 
         const user = await User.findOne({ where: { username } });
         if(!user) {
