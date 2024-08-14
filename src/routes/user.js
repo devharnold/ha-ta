@@ -9,7 +9,7 @@ app.use(express.json());
 
 router.get('/user/:id', async(req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.params.id;
         const user = await User.findByPk(userId);
 
         if(user) {
@@ -72,14 +72,14 @@ router.put('/user/:id', async(req, res) => {
 
 router.delete('/user/:id', async(req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.params.id;
         const user = await User.findByPk(userId);
 
         if(user) {
             await user.destroy();
             res.json({ message: 'User deleted profile', user });
         } else {
-            res.status(404).send({ mesage: 'User not found' });
+            res.status(404).send({ meSsage: 'User not found' });
         }
     } catch(error) {
         console.error('Error deleting the user', error);
