@@ -14,16 +14,64 @@ const secretkey = process.env.JWT_SECRET;
 exports.user_update_detail = asyncHandler(async (req, res, next) => {
     res.send("Not updated: User profile update");
 });
-*/
+*/'use strict';
+
+const { Sequelize } = require('sequelize');
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.bulkInsert('Users', [
+      {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'example@example.com',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
+  },
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.bulkDelete('Users', null, {});
+  },
+   
+   //async up (queryInterface, Sequelize) {
+    /**
+     * Add seed commands here.
+     *
+     * Example:
+     * await queryInterface.bulkInsert('People', [{
+     *   name: 'John Doe',
+     *   isBetaMember: false
+     * }], {});
+    */
+   //},
+
+  // async down (queryInterface, Sequelize) {
+    /**
+     * Add commands to revert seed here.
+     *
+     * Example:
+     * await queryInterface.bulkDelete('People', null, {});
+     */
+   //}
+};
+
+function hashPassword(password) {
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
+}
+module.exports = { hashPassword };
+
 exports.registerUser = async(req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { firstName, lastName, email, password } = req.body;
         
         // hash the password.
         const hashedPassword = await bcrypt.hash(password, 10);
 
         //newUser and hash the password.
-        const newUser = await User.create({ name, email, password: hashedPassword });
+        const newUser = await User.create({ firstName, lastName, email, password: hashedPassword });
         return res.status(201).json(newUser);
     } catch (error) {
         return res.status(500).json({ error: 'Error creating user'})

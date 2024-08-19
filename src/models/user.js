@@ -1,4 +1,7 @@
 'use strict';
+const { router } = require('../routes/user');
+const bcrypt = require('bcrypt');
+
 const {
   Model
 } = require('sequelize');
@@ -25,10 +28,34 @@ module.exports = (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     phoneNumber: DataTypes.INTEGER,
-    email: DataTypes.STRING
+    email: DataTypes.STRING,
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: [8, 16] // sets a minimum of 8 and a maximum of 16 characters within the string.
+    },
   }, {
+    timestamps: true,
     sequelize,
     modelName: 'User',
+
+    hooks: {
+      beforeCreate: async (user) => {
+        if (user.password) {
+          const salt = await bcrypt.genSalt(10);
+          user.password = await bcrypt.hash(user.password, salt);
+        }
+      },
+      beforeUpdate: async (user) => {
+        if (user.changed('password')) {
+          const salt = await bcrypt.genSalt(10);
+          user.password = await bcrypt.hash(user.password, salt);
+        }
+      },
+    },
   });
+  User.prototype.validatePassword = async function(password) {
+    return await bcrypt.compare(password, this.password);
+  }
   return User;
 };

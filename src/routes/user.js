@@ -96,4 +96,5 @@ app.listen(PORT, error => {
     }
     console.log(`Listening on port: ${PORT}`);
 });
+
 module.exports = router;

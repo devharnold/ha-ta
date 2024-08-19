@@ -1,22 +1,24 @@
 'use strict';
-
-const { query } = require('express');
-const { Sequelize } = require('../models/country');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Countries', {
+    await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      firstName: {
         type: Sequelize.STRING
       },
-      continent: {
+      lastName: {
+        type: Sequelize.STRING
+      },
+      phoneNumber: {
+        type: Sequelize.INTEGER
+      },
+      email: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -29,10 +31,7 @@ module.exports = {
       }
     });
   },
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('Countries', 'continent');
-  },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Countries');
+    await queryInterface.dropTable('Users');
   }
 };
