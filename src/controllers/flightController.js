@@ -11,7 +11,7 @@ exports.searchFlight = async(req, res) => {
         const flights = await collection.data.forEach(item => parseFlightData(item));
 
         await flights.forEach(flight => saveFlightInfo(flight))
-    } catch(error) {
+    }catch(error) {
         handleError(error)
     }
 }
