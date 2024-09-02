@@ -3,7 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const router = express.Router();
-const { User } = require('../models/models/user');
+const { User } = require('../models/user');
+const { authenticateUser } = require('../middlewares/authMiddleware');
 
 app.use(express.json());
 
@@ -26,7 +27,7 @@ router.get('/user/:id', async(req, res) => {
 router.get('/user/name/:name', async(req, res) => {
     try {
         const username = req.params.name;
-        const user = await User.findOne({ where: { firstName: username } });
+        const user = await User.findOne({ where: { name: username } });
 
         if (user) {
             res.json(user);
@@ -41,32 +42,58 @@ router.get('/user/name/:name', async(req, res) => {
 
 router.post('/user', async(req, res) => {
     try {
-        const newUser = req.body;
-        const createdUser = await User.create(newUser);
+        // const newUser = req.body;
+        // const createdUser = await User.create(newUser);
+        const { firstName, lastName, email, password} = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        res.status(201).send({ message: 'New user creeated!' });
+        const newUser = await User.create({ firstName, lastName, email, password: hashedPassword });
+        return res.status(201).json(newUser);
     } catch (error) {
-        console.error('Error creating a new user!');
+        console.error('Error creating a new user!', error);
         res.status(500).send({ message: 'Server error!' });
     }
 });
 
-router.put('/user/:id', async(req, res) => {
+router.put('/user/:userId', authenticateUser, async(req, res) => {
+    const { userId } = req.params;
+    // fields to be updated
+    const { firstName, lastName, phoneNumber, password } = req.body;
+    
     try {
-        const userId = req.params.id;
-        const updatedUser = req.body;
-
         const user = await User.findByPk(userId);
 
-        if(user) {
-            await user.update(updatedUser);
-            res.json({ message: 'User updated their profile!', user });
-        } else {
-            res.status(404).send({ message: 'User not found' });
+        if(!user) {
+            return res.status(401).json({ message: 'User not found' });
         }
+
+        user.firstName = firstName || user.firstName;
+        user.lastName = lastName || user.lastName;
+        user.phoneNumber = phoneNumber || user.phoneNumber;
+
+        const validatePassword = (password) => {
+            const isValidLength = password.length >= 8;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+
+            return isValidLength && hasUpperCase && hasLowerCase && hasNumber;
+        }
+
+        if (password) {
+            if (!validatePassword(password)) {
+                return res.status(400).json({ message: 'Make sure password meets requirements' })
+            }
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            user.password = hashedPassword;          
+        }
+
+        await user.save();
+
+        res.json({ message: 'User updated profile', user });
     } catch(error) {
-        console.error('Error updating user by id', error);
-        res.status(500).send({ message: 'Server error' })
+        res.status(500).json({ message: 'Error', error });
     }
 });
 

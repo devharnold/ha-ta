@@ -7,11 +7,11 @@ exports.searchFlight = async(req, res) => {
         headers,
     }
     try {
-        const collection = await browser.get(options, (err, req, body) => JSON.parse(body))
+        const collection = await browser.get(options, (err, req, body) => JSON.parse(body));
         const flights = await collection.data.forEach(item => parseFlightData(item));
 
-        await flights.forEach(flight => saveFlightInfo(flight))
+        await flights.forEach(flight => saveFlightInfo(flight));
     }catch(error) {
-        handleError(error)
+        handleError(error);
     }
-}
+};

@@ -1,5 +1,5 @@
 'use strict';
-const { router } = require('../routes/user');
+const { router } = require('../routes/userRoute');
 const bcrypt = require('bcrypt');
 
 const {
