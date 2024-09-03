@@ -1,4 +1,6 @@
-const { User } = require("../models/models/user"); //importing
+'use strict';
+
+const { User } = require("../models/user"); //importing
 // const asyncHandler = require("express-async-handler");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -14,7 +16,7 @@ const secretkey = process.env.JWT_SECRET;
 exports.user_update_detail = asyncHandler(async (req, res, next) => {
     res.send("Not updated: User profile update");
 });
-*/'use strict';
+*/
 
 const { Sequelize } = require('sequelize');
 
@@ -65,13 +67,13 @@ module.exports = { hashPassword };
 
 exports.registerUser = async(req, res) => {
     try {
-        const { firstName, lastName, email, password } = req.body;
+        const { firstName, lastName, email, password, phoneNumber } = req.body;
         
         // hash the password.
         const hashedPassword = await bcrypt.hash(password, 10);
 
         //newUser and hash the password.
-        const newUser = await User.create({ firstName, lastName, email, password: hashedPassword });
+        const newUser = await User.create({ firstName, lastName, email, phoneNumber, password: hashedPassword });
         return res.status(201).json(newUser);
     } catch (error) {
         return res.status(500).json({ error: 'Error creating user'})
@@ -80,9 +82,9 @@ exports.registerUser = async(req, res) => {
 
 exports.userLogin = async(req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        const user = await User.findOne({ where: { username } });
+        const user = await User.findOne({ where: { email } });
         if(!user) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
