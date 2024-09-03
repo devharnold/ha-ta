@@ -9,9 +9,9 @@ describe('GET /user/:id', function() {
             .get('/user/:id')
             .auth('username', 'password')
             .set('Accept', 'application/json')
-        expect(response.headers['Content-Type']).toMatch(/json/);
-        expect(response.status).toEqual(200);
-        expect(response.body.userId).toEqual('testid')
+        expect(response.headers['Content-Type']).to.match(/json/);
+        expect(response.status).to.equal(200);
+        expect(response.body.userId).to.equal('testid')
     });
 });
 
@@ -22,9 +22,9 @@ describe('GET /user/name/:name', function() {
             .get('user/name/:name')
             .auth('username', 'password')
             .set('Accept', 'application/json')
-        expect(response.headers['Content-Type']).toMatch(/json/);
-        expect(response.status).toEqual(200);
-        expect(response.body.username).toEqual('testuser');
+        expect(response.headers['Content-Type']).to.match(/json/);
+        expect(response.status).to.equal(200);
+        expect(response.body.username).to.equal('testuser');
     })
 })
 
@@ -55,7 +55,7 @@ describe('POST /users', function() {
                 res.body.id = 'some id';
                 res.body.name = res.body.toLowerCase();
             })
-            .expect(response.headers['Content-Type']).toMatch(/json/)
+            .expect(response.headers['Content-Type']).to.match(/json/)
             .expect(200, {
                 id: 'some id',
                 name: 'elle'

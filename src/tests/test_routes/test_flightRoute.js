@@ -8,9 +8,9 @@ describe('GET /search-flights', function() {
         const response = await request(app)
             .get('/search-flights')
             .set('Accept', 'application/json');
-        expect(response.headers['Content-Type']).toMatch(/json/);
-        expect(response.status).toEqual(200);
-        expect(response.body).toHaveProperty('flights');
+        expect(response.headers['Content-Type']).to.match(/json/);
+        expect(response.status).to.equal(200);
+        expect(response.body).to.have.property('flights');
     });
 });
 
@@ -19,9 +19,9 @@ describe('GET /amadeusToken', function() {
         const response = await request(app)
             .get('/amadeusToken')
             .set('Accept', 'application/json');
-        expect(response.headers['Content-Type']).toMatch(/json/);
-        expect(response.status).toEqual(200);
-        expect(response.body).toHaveProperty('amadeus token')
+        expect(response.headers['Content-Type']).to.match(/json/);
+        expect(response.status).to.equal(200);
+        expect(response.body).to.have.property('amadeus token')
     })
 })
 
