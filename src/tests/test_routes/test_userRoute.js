@@ -1,64 +1,112 @@
-const request = require('supertest');
-const express = require('express');
+#!/usr/bin/env node
+import request from 'supertest';
+import express from 'express';
+import user from '../../models/user';
+import userRoute from '../../routes';
+import { authenticateUser } from '../../middlewares/authMiddleware';
+import { expect } from 'chai';
+
 const app = express();
+app.use(express.json());
 
-// test for get user by userId
-describe('GET /user/:id', function() {
-    it('responds with json', async function() {
-        const response = await request(app)
-            .get('/user/:id')
-            .auth('username', 'password')
-            .set('Accept', 'application/json')
-        expect(response.headers['Content-Type']).to.match(/json/);
-        expect(response.status).to.equal(200);
-        expect(response.body.userId).to.equal('testid')
+app.post('/get', user);
+app.post('/post', user/id);
+app.post('/put', authenticateUser);
+app.post('/delete', user/id);
+
+
+describe('User route tests', () => {
+    describe('GET /user/:id', () => {
+        it('should fetch a user by the userId', async() => {
+            const response = await request(app)
+                .get('/user/:id')
+                .set('Accept', 'application/json')
+            expect(response.status).to.equal(200)
+            expect(response.headers['Content-Type']).to.match(/json/)
+            expect(response.body).to.have.property('userId', '340')
+        });
     });
-});
-
-// test for get user by name
-describe('GET /user/name/:name', function() {
-    it('responds with json', async function() {
-        const response = await request(app)
-            .get('user/name/:name')
-            .auth('username', 'password')
-            .set('Accept', 'application/json')
-        expect(response.headers['Content-Type']).to.match(/json/);
-        expect(response.status).to.equal(200);
-        expect(response.body.username).to.equal('testuser');
-    })
-})
-
-//post a user
-describe('POST /user', function() {
-    it('responds with json', function(done) {
-        request(app)
-            .post('/user')
-            .send({ name: 'john' })
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .end(function (err, res) {
-                if (err) done(err);
-                return done();
-            });
+    describe('GET /user', () => {
+        it('should return a user', async() => {
+            const response = await request(app)
+                .get('/user')
+                .send({
+                    firstName: 'Arnold',
+                })
+                .set('Accept', 'application/json')
+            expect(response.status).to.equal(200);
+            expect(response.headers['Content-Type']).to.match(/json/);
+            expect(response.body).to.have.property('firstName', 'Arnold');
+        });
+        
+        it('should get user by name', async() => {
+            const response = await request(app)
+                .get('/user/user/:name')
+                .send({
+                    lastName: 'Henry'
+                })
+                .set('Accept', 'application/json')
+            expect(response.status).to.equal();
+            expect(response.headers['Content-Type']).to.match(/json/);
+            expect(response.body).to.have.property('lastName', 'Henry')
+        })
     });
-});
 
-// post a user with a case-insensitive match
-describe('POST /users', function() {
-    it('user.name should be a case-insensitive match for john', async function() {
-        const response = await request(app)
-            .post('/user')
-            .send('name=elle')
-            .set('Accept', 'application/json')
-            .expect(function(res) {
-                res.body.id = 'some id';
-                res.body.name = res.body.toLowerCase();
-            })
-            .expect(response.headers['Content-Type']).to.match(/json/)
-            .expect(200, {
-                id: 'some id',
-                name: 'elle'
-            }, done);
+    describe('POST /user', () => {
+        it('should create a new user', async() => {
+            const response = await request(app)
+                .post('/user')
+                .send({
+                    fistName: 'henry',
+                    lastName: 'arnold',
+                    phoneNumber: '143444945',
+                    email: 'testarn@email.com',
+                    password: 'testpassword',
+                })
+                .set('Accept', 'application/json')
+            expect(response.status).to.equal();
+            expect(response.headers['Content-Type']).to.match(/json/);
+            expect(response.body).to.have.property('email', 'testarn@example');
+        });
+        
+        it('should post a user with case-sensitive match', async() => {
+            const response = await request(app)
+                .post('/user')
+                .send({
+                    firstName: 'elle'
+                })
+                .set('Accept', 'application/json')
+            expect(response.status).to.equal(200);
+            expect(response.headers['Content-Type', 'application/json']);
+            expect(response.body).to.have.property('firstName', 'elle');
+        });
+    });
+
+    describe('PUT /user/:id', () => {
+        it('should authenticate a user first before updating', async() => {
+            const response = await request(app)
+                .get('/user/:id')
+                .auth('email', 'password')
+                .send({
+                    email: 'testarn@email.com',
+                    password: 'testpassword'
+                })
+                .set('Accept', 'application/json')
+            expect(response.status).to.equal(200);
+            expect(response.headers['Content-Type']).to.match(/json/);
+        });
+
+        it('should deny access after wrong credentials', async() => {
+            const response = await request(app)
+                .get('/user/:id')
+                .auth('email', 'password')
+                .send({
+                    email: 'testarn@email.com',
+                    password: 'wrongpassword'
+                })
+                .set('Accept', 'application/json')
+            expect(response.status).to.equal(401);
+            expect(response.headers['Content-Type']).to.match(/json/);
+        });
     });
 });

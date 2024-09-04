@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { User } = require('../models/user'); //imports the user model
 const expect = require('chai'); // import the chai assertion library
 const { Sequelize, DataTypes, Model } = require('sequelize');

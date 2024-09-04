@@ -1,71 +1,19 @@
 'use strict';
 
-const { User } = require("../models/user"); //importing
-// const asyncHandler = require("express-async-handler");
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import "../models/user.js"; //import user from models directory
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 require('dotenv').config();
 const secretkey = process.env.JWT_SECRET;
 
-// handles user display detail
-/** exports.user_detial = asyncHandler(async (req, res, next) => {
-    res.send(`Not Implemented: Author detail: ${req.params.id}`);
-});
 
-//handles user details update
-exports.user_update_detail = asyncHandler(async (req, res, next) => {
-    res.send("Not updated: User profile update");
-});
-*/
-
-const { Sequelize } = require('sequelize');
-
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Users', [
-      {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'example@example.com',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ]);
-  },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Users', null, {});
-  },
-   
-   //async up (queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
-   //},
-
-  // async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
-   //}
-};
-
-function hashPassword(password) {
+export function hashPassword(password) {
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(password, salt);
 }
 module.exports = { hashPassword };
 
-exports.registerUser = async(req, res) => {
+export async function registerUser (req, res) {
     try {
         const { firstName, lastName, email, password, phoneNumber } = req.body;
         
@@ -80,7 +28,7 @@ exports.registerUser = async(req, res) => {
     }
 }
 
-exports.userLogin = async(req, res) => {
+export async function userLogin (req, res) {
     try {
         const { email, password } = req.body;
 
@@ -105,7 +53,7 @@ exports.userLogin = async(req, res) => {
 }
 
 //function to generate a token
-function generateToken(user) {
+export function generateToken(user) {
     const payload = {
         id: user.id,
         username: user.name,
