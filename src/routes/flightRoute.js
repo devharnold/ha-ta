@@ -1,15 +1,15 @@
-const express = require('express');
-const app = express();
-const router = express.Router();
+import express from'express';
 require('dotnev').config();
-const requestLogger = require('../middlewares/requestLogger');
-const validateEnv = require('../middlewares/validateEnv')
-const errorHandler = require('../middlewares/errorHandler')
-
+import requestLogger from '../middlewares/requestLogger';
+import validateEnv from '../middlewares/validateEnv';
+import errorHandler from '../middlewares/errorHandler';
 const PORT = '3001';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
+
+const app = express();
+const router = express.Router();
 
 app.use(requestLogger);
 app.use(validateEnv);
@@ -74,3 +74,8 @@ app.use(errorHandler);
 app.listen(PORT, () => {
     console.log(`Server is running on http://loclhost:${port}`);
 });
+
+
+module.exports = {
+    getAmadeusToken
+}

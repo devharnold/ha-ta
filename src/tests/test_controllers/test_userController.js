@@ -1,31 +1,56 @@
-const { User } = require('../models/user');
-const assert = require('assert');
-const expect = reqire('chai');
-const { userLogin } = require('../controllers/userController');
+import { registerUser, userLogin } from "../../controllers/userController.js";
+import { describe, it } from 'mocha';
+import { expect } from 'chai';
+import supertest from 'supertest';
+import express from 'express';
 
+const { request } = supertest;
 
-describe('userController()', function() {
-    describe('#registerUser()', function() {
-        it('should register and save a user', function(done) {
-            var user = User.registerUser(function(err) {
-                if(err) done(err);
-                else(done);
-            })
-        });
-    })
-    before(function (done) {
-        User.save(function (err, User) {
-            done();
+const app = express();
+app.use(express.json());
+
+app.post('/register', registerUser);
+app.post('/login', userLogin);
+
+describe('User controller tests', () => {
+    describe('POST /register', () => {
+        it('should register a new user successfully', async() => {
+            const response = await request(app)
+                .post('/register')
+                .send({
+                    firstName: 'Bona',
+                    secondName: 'Reri',
+                    email: 'test@example.com',
+                    phoneNumber: '12345567',
+                    password: 'testpassword',
+                });
+            expect(response.status).to.equal(201);
+            expect(response.body).to.have.property('email', 'test@example.com')
         });
     });
-    describe('#find()', function() {
-        it('should find a user according to the username', function(done) {
-            User.findOne({ username: 'FakeUser'}, function(err, User) {
-                done();
-            });
+
+    describe('POST /login', () => {
+        it('should login a user successfully', async() => {
+            const response = await request(app)
+                .post('/login')
+                .send({
+                    email: 'test@example.com',
+                    password: 'testpassword',
+                });
+            expect(response.status).to.equal(201);
+            expect(response.body).to.have.property('firstName', 'Bona')
         });
     });
-    this.afterAll(function(done) {
-        done();
+
+    describe('POST /login', () => {
+        it('should check for valid credentials', async() => {
+            const response = await request(app)
+                .post('/login')
+                .send({
+                    email: 'test@example.com',
+                    password: 'testpasss',
+                });
+            expect(response.status).to.equal(401);
+        });
     });
 });

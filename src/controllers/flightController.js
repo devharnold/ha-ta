@@ -1,4 +1,6 @@
-const { Flight } = require('../models/flight');
+'use strict';
+
+import { flight } from '../models';
 
 exports.searchFlight = async(req, res) => {
     const options = {
@@ -15,3 +17,6 @@ exports.searchFlight = async(req, res) => {
         handleError(error);
     }
 };
+
+
+module.exports = searchFlight;

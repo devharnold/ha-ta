@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { Review } = require('../models/review');
 // const { User } = require('../models/user');
 const expect = require('chai');
