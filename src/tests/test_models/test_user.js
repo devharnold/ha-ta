@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-const { User } = require('../models/user'); //imports the user model
-const expect = require('chai'); // import the chai assertion library
-const { Sequelize, DataTypes, Model } = require('sequelize');
-require('dotenv').config(); //.env file that contains the passwords
+import User from '../../models/user';
+import { expect } from 'chai';
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import dotenv from 'dotenv';
+dotenv.config();
 
 class User extends Model {}
 

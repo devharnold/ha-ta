@@ -1,5 +1,8 @@
 import express from'express';
-require('dotnev').config();
+import dotenv from 'dotenv';
+dotenv.config();
+import fetch from 'node-fetch';
+import { searchFlight } from '../controllers/flightController';
 import requestLogger from '../middlewares/requestLogger';
 import validateEnv from '../middlewares/validateEnv';
 import errorHandler from '../middlewares/errorHandler';
@@ -14,7 +17,9 @@ const router = express.Router();
 app.use(requestLogger);
 app.use(validateEnv);
 
-async function getAmadeusToken() {
+app.use(searchFlight);
+
+export async function getAmadeusToken() {
     try {
         const response = await fetch('https://test.api.amadeus.com/v1/security/oauth/token', {
             method: 'POST',
@@ -28,14 +33,14 @@ async function getAmadeusToken() {
 
         const data = await response.json();
         return data.access_token;
-    } catch (err) {
-        console.err('Error processing your fetch token request: ', err.message);
+    } catch (error) {
+        console.error('Error processing your fetch token request: ', error.message);
         return null;
     }
 }
 
 router.get('/search-flights', async (req, res) => {
-    const { depatureCity, arrivalCity, depatureDate } = req.query;
+    const { departureCity, arrivalCity, departureDate } = req.query;
 
     const token = await getAmadeusToken();
     if(!token) {
@@ -45,12 +50,6 @@ router.get('/search-flights', async (req, res) => {
         const response = await fetch('https://test.api.amadeus.com/v2/shopping/flight-offers', {
             method: 'GET',
             headers: { Authorization: `Bearer ${token}` },
-            body: new URLSearchParams({
-                originLocationCode: depatureCity,
-                destinationLocationCode: arrivalCity,
-                depatureDate: depatureDate,
-                adults: 1,
-            })
         });
         const data = await response.json();
         const flights = data.data;
@@ -72,10 +71,5 @@ app.use('/api', router)
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://loclhost:${port}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-module.exports = {
-    getAmadeusToken
-}

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 import request from 'supertest';
 import express from 'express';
 import { expect } from 'chai';

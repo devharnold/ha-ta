@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const { Review } = require('../models/review');
-// const { User } = require('../models/user');
-const expect = require('chai');
-const { Sequelize, DataTypes, Model } = require('sequelize');
-require(dotenv).confgig();
+import { Review } from '../../models/review'
+import { expect } from 'chai';
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import dotenv from 'dotenv';
+dotenv.config();
 
 class Review extends Model {}
 

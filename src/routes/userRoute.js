@@ -1,12 +1,17 @@
 "use strict";
-require('dotenv').config();
-const express = require('express');
+import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
 const app = express();
 const router = express.Router();
-const { User } = require('../models/user');
-const { authenticateUser } = require('../middlewares/authMiddleware');
+import User from '../models/user';
+import { registerUser, userLogin, deleteUser } from '../controllers/userController';
+import { authenticateUser } from '../middlewares/authMiddleware';
 
 app.use(express.json());
+app.use(registerUser);
+app.use(userLogin);
+app.use(deleteUser);
 
 router.get('/user/:id', async(req, res) => {
     try {
@@ -44,10 +49,10 @@ router.post('/user', async(req, res) => {
     try {
         // const newUser = req.body;
         // const createdUser = await User.create(newUser);
-        const { firstName, lastName, email, password} = req.body;
+        const { firstName, lastName, email, phoneNumber, password} = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await User.create({ firstName, lastName, email, password: hashedPassword });
+        const newUser = await User.registerUser({ firstName, lastName, email, phoneNumber, password: hashedPassword });
         return res.status(201).json(newUser);
     } catch (error) {
         console.error('Error creating a new user!', error);
