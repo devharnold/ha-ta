@@ -1,6 +1,7 @@
 #!/usr/bin/node
 
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 const express = require('express');
 const userRoute = require('../ha-ta/src/routes/userRoute');
 const app = express();

@@ -1,9 +1,10 @@
 'use strict';
 
-import "../models/user.js"; //import user from models directory
+import User from "../models/user.js"; //import user from models directory
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 const secretkey = process.env.JWT_SECRET;
 
 
@@ -49,6 +50,27 @@ export async function userLogin (req, res) {
         res.json({ token });
     } catch (error) {
         return res.status(500).json({ error: 'Server error', error});
+    }
+}
+
+export async function deleteUser (req, res) {
+    try {
+        const { email, password} = req.body;
+        const user = await User.findOne({ where: { email } })
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found!'})
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(!isMatch) {
+            return res.status(401).json({ error: 'Invalid creditials' })
+        }
+
+        await user.destroy();
+        return res.status(200).json({ message: 'User deleted successfully '})
+    } catch (error) {
+        console.error('Error deleting user:', error.message);
+        res.status(500).json({ error: 'Error occured while deleting user. PLease try again later'})
     }
 }
 

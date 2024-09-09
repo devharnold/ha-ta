@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;

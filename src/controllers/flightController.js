@@ -1,8 +1,8 @@
 'use strict';
 
-import { flight } from '../models';
+// import { flight } from '../models';
 
-exports.searchFlight = async(req, res) => {
+export async function searchFlight (req, res) {
     const options = {
         data: search,
         uri: endpointCollection,
@@ -17,6 +17,3 @@ exports.searchFlight = async(req, res) => {
         handleError(error);
     }
 };
-
-
-module.exports = searchFlight;
