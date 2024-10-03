@@ -70,6 +70,8 @@ app.use('/api', router)
 
 app.use(errorHandler);
 
+export default getAmadeusToken;
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

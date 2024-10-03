@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha"
+    "test": "'test_routes/**/*.js' 'test_models/**/*.js' 'test_controllers/**/*.js'"
   },
   "repository": {
     "type": "git",

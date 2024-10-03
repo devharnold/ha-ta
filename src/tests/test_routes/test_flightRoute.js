@@ -4,7 +4,7 @@ dotenv.config();
 import request from 'supertest';
 import express from 'express';
 import { expect } from 'chai';
-import getAmadeusToken from '../../routes/flightRoute';
+import getAmadeusToken from '../../routes/flightRoute.js';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET
@@ -12,11 +12,21 @@ const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET
 const app = express();
 app.use(express.json());
 
-app.post('/GET AmadeusToken', getAmadeusToken);
-app.post('/GET search-flights', search-flights);
+app.post('/AmadeusToken', getAmadeusToken);
+app.post('/search-flights', searchFlights);
 
+/**
+ * Flight route tests
+ * 1. Get amadeus token
+ * 2. Search flights
+ * Tests if it fetches the amadeus token,
+ *  @returns: Success if connected with amadeus token
+ * Tests for search-flights function
+ *  @returns: Possible flights according to the query params
+ * 
+ */
 describe('flight route tests', () => {
-    describe('GET /amadeusToken', () => {
+    describe('POST /amadeusToken', () => {
         it('should get the amadeus api token key', async() => {
             const response = await request(app)
                 .get('/amadeusToken')
@@ -28,7 +38,7 @@ describe('flight route tests', () => {
         });
     });
 
-    describe('GET /search-flights', () => {
+    describe('POST /search-flights', () => {
         it('should return list of found flights', async() => {
             const response = await request(app)
                 .get('/amadeusToken')
