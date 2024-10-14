@@ -12,14 +12,22 @@ exports.requestLogger = (req, res, next) => {
 };
 
 exports.validateEnv = (req, res, next) => {
-    if (!AMADEUS_API_KEY || AMADEUS_API_SECRET) {
+    if (!AMADEUS_API_KEY || !AMADEUS_API_SECRET) {  // Fix the condition
         console.error('Amadeus API credentials are missing');
         return res.status(500).send('Server Error');
     }
     next();
 };
 
-exports.errorHandler = (req, res, next) => {
-    console.error('An error occured:', error.message);
+// Error handler should accept an `error` parameter
+exports.errorHandler = (error, req, res, next) => {  
+    console.error('An error occurred:', error.message);
     res.status(500).send('Server Error');
+};
+
+// Fix module.exports syntax
+module.exports = {
+    requestLogger,
+    validateEnv,
+    errorHandler,
 };

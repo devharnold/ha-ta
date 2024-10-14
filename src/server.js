@@ -2,11 +2,11 @@
 
 import dotenv from 'dotenv';
 dotenv.config();
-const express = require('express');
-const userRoute = require('../ha-ta/src/routes/userRoute');
+import express from 'express';
 const app = express();
-const hostname = '127.0.0.1';
-const port = '3001';
+import { userRoute } from '../../src/routes/userRoute';
+const hostname = process.env.DB_HOST;
+const PORT = process.env.PORT;
 
 const db = require('./src/models');
 
