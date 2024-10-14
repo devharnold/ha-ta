@@ -2,11 +2,9 @@ import express from'express';
 import dotenv from 'dotenv';
 dotenv.config();
 import fetch from 'node-fetch';
-// import { searchFlights } from '../controllers/flightController.js';
-/**import requestLogger from '../middlewares/requestLogger';
-import validateEnv from '../middlewares/validateEnv';
-import errorHandler from '../middlewares/errorHandler';*/
-const PORT = '3001';
+import { searchFlights } from '../controllers/flightController.js';
+import { requestLogger, validateEnv, errorHandler } from '../middlewares/flightmiddleware.js';
+const PORT = process.env.PORT;
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
@@ -14,10 +12,10 @@ const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
 const app = express();
 const router = express.Router();
 
-//app.use(requestLogger);
-//app.use(validateEnv);
+app.use(requestLogger);
+app.use(validateEnv);
 
-// app.use(searchFlights);
+app.use(searchFlights);
 
 export async function getAmadeusToken() {
     try {
@@ -57,7 +55,7 @@ export async function searchFlights(req, res) {
                 originLocationCode: departureCity,
                 destinationLocationCode: arrivalCity,
                 departureDate: departureDate,
-                adults: 1,  // example static data, adjust as needed
+                adults: 1,
             },
         });
 

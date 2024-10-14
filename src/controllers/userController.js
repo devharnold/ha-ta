@@ -87,3 +87,10 @@ export function generateToken(user) {
 
     return jwt.sign(payload, secretkey, { expiresIn: '2hrs'});
 }
+
+module.exports = {
+    registerUser,
+    userLogin,
+    deleteUser,
+    generateToken
+}

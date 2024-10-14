@@ -60,5 +60,4 @@ module.exports = (sequelize, DataTypes) => {
   return User;
 };
 
-// export User as a named export.
-export { User };
+exports.User = User;

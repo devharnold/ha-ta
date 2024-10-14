@@ -1,4 +1,4 @@
-/**import { registerUser, userLogin } from "../../controllers/userController.js";
+import { registerUser, userLogin } from "../../controllers/userController.js";
 import { describe, it } from 'mocha';
 import { expect } from 'chai';
 import supertest from 'supertest';
@@ -60,4 +60,4 @@ describe('User controller tests', () => {
     });
 });
 
-export { User };*/
+export { User };

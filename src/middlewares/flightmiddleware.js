@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/**'use strict';
+'use strict';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -31,4 +31,3 @@ module.exports = {
     validateEnv,
     errorHandler,
 };
-*/

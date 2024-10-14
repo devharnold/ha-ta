@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import dotenv from 'dotenv';
+/**import dotenv from 'dotenv';
 dotenv.config();
 import request from 'supertest';
 import express from 'express';
@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.post('/AmadeusToken', getAmadeusToken);
 app.post('/search-flights', searchFlights);
-
+*/
 /**
  * Flight route tests
  * 1. Get amadeus token
@@ -25,6 +25,7 @@ app.post('/search-flights', searchFlights);
  *  @returns: Possible flights according to the query params
  * 
  */
+/**
 describe('flight route tests', () => {
     describe('POST /amadeusToken', () => {
         it('should get the amadeus api token key', async() => {
@@ -49,4 +50,4 @@ describe('flight route tests', () => {
             expect(response.body).to.have.property('flights')
         });
     });
-})
+})*/

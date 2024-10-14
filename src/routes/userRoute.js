@@ -4,9 +4,9 @@ dotenv.config();
 import express from 'express';
 const app = express();
 const router = express.Router();
-import User from '../models/user';
-import { registerUser, userLogin, deleteUser } from '../controllers/userController';
-import { authenticateUser } from '../middlewares/authMiddleware';
+// import { User } from '../models/user';
+import { registerUser, userLogin, deleteUser } from '../controllers/userController.js';
+// import { authenticateUser } from '../middlewares/authMiddleware';
 
 app.use(express.json());
 app.use(registerUser);

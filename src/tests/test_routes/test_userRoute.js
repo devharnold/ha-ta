@@ -2,14 +2,14 @@
 import request from 'supertest';
 import express from 'express';
 import { userRoute } from '../../routes/userRoute.js'
-// import { user } from '../../models/user';
-// import { authenticateUser } from '../../middlewares/authMiddleware';
+import { User } from '../../models/user.js';
 import { expect } from 'chai';
+import { authenticateUser } from '../../middlewares/authmiddleware.js'
 
 const app = express();
 app.use(express.json());
 
-//app.use('/user', userRoute);
+app.use('/user', userRoute);
 
 app.post('/get', user);
 app.post('/post', user/id);

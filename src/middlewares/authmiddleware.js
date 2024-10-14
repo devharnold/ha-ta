@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET;
 
-exports.authenticateUser = async(req, res) => {
+export async function authenticateUser(req, res) {
     const token = req.header('Authorization')?.replace('Bearer', '');
-    
+
     if(!token) {
-        return res.status(401).json({ message: 'Access denied'});
+        return res.status(401).json({ message: 'Access Denied' });
     }
 
     try {
@@ -13,6 +13,8 @@ exports.authenticateUser = async(req, res) => {
         req.user = decoded;
         next();
     } catch(error) {
-        res.status(400).json({ message: 'Invalid token' });
+        res.status(400).json({ message: 'Invalid Token' });
     }
-};
+}
+
+exports.authenticateUser = authenticateUser;
