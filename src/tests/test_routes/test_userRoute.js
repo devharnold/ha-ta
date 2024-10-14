@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 import request from 'supertest';
 import express from 'express';
-import user from '../../models/user';
-import userRoute from '../../routes';
-import { authenticateUser } from '../../middlewares/authMiddleware';
+import { userRoute } from '../../routes/userRoute.js'
+// import { user } from '../../models/user';
+// import { authenticateUser } from '../../middlewares/authMiddleware';
 import { expect } from 'chai';
 
 const app = express();
 app.use(express.json());
+
+//app.use('/user', userRoute);
 
 app.post('/get', user);
 app.post('/post', user/id);
@@ -102,6 +104,33 @@ describe('User route tests', () => {
                 .auth('email', 'password')
                 .send({
                     email: 'testarn@email.com',
+                    password: 'wrongpassword'
+                })
+                .set('Accept', 'application/json')
+            expect(response.status).to.equal(401);
+            expect(response.headers['Content-Type']).to.match(/json/);
+        });
+    });
+
+    describe('DELETE /user/:id', () => {
+        it('should delete a user only after validated', async() => {
+            const response = await request(app)
+                .get('/user/:id')
+                .auth('email', 'password')
+                .send({
+                    email: 'testuser@email.com',
+                    password: 'testpassword'
+                })
+                .set('Accept', 'application/json')
+            expect(response.status).to.equal(204); // No content after deleting a user
+            expect(response.headers['Content-Type']).to.match(/json/);
+        });
+        it('should deny user the permission due to invalid credentials', async() => {
+            const response = await request(app)
+                .get('/user/:id')
+                .auth('email', 'password')
+                .send({
+                    email: 'testmail@email.com',
                     password: 'wrongpassword'
                 })
                 .set('Accept', 'application/json')

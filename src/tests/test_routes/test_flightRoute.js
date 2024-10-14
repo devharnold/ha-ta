@@ -4,7 +4,7 @@ dotenv.config();
 import request from 'supertest';
 import express from 'express';
 import { expect } from 'chai';
-import getAmadeusToken from '../../routes/flightRoute.js';
+import { getAmadeusToken, searchFlights } from '../../routes/flightRoute.js';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET

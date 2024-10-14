@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Review } from '../../models/review'
+// import { Review } from '../../models/review';
 import { expect } from 'chai';
 import { Sequelize, DataTypes, Model } from 'sequelize';
 import dotenv from 'dotenv';
@@ -16,7 +16,7 @@ const sequelize = new Sequelize('hataData', 'root', process.env.DB_PASSWORD, {
 
 describe('MySQL Connection', function () {
     // create a mysql connection first
-    this.before(async function() {
+    before(async function() {
         try {
             await sequelize.authenticate();
             console.log('Connected');
@@ -37,7 +37,7 @@ describe('MySQL Connection', function () {
             console.err('Unable to connect', err);
         }
     });
-    this.beforeEach(async function() {
+    beforeEach(async function() {
         await Review.destroy({ where: {} })
     });
 
@@ -53,7 +53,7 @@ describe('MySQL Connection', function () {
         expect(foundReview.description).to.equal('Complement')
     })
     describe('#find()', function() {
-        this.beforeEach(function (done) {
+        beforeEach(function (done) {
             Review.save(function(err, Review) {
                 done();
             });
@@ -64,7 +64,7 @@ describe('MySQL Connection', function () {
             });
         });
     })
-    afterAll(function (done) {
+    after(function (done) {
         done();
     });
 })

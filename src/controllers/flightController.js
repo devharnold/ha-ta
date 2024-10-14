@@ -2,7 +2,7 @@
 
 // import { flight } from '../models';
 
-export async function searchFlight (req, res) {
+export async function searchFlights (req, res) {
     const options = {
         data: search,
         uri: endpointCollection,
@@ -17,3 +17,6 @@ export async function searchFlight (req, res) {
         handleError(error);
     }
 };
+
+
+module.exports = { searchFlights };

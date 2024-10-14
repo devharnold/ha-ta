@@ -2,10 +2,10 @@ import express from'express';
 import dotenv from 'dotenv';
 dotenv.config();
 import fetch from 'node-fetch';
-import { searchFlight } from '../controllers/flightController';
-import requestLogger from '../middlewares/requestLogger';
+// import { searchFlights } from '../controllers/flightController.js';
+/**import requestLogger from '../middlewares/requestLogger';
 import validateEnv from '../middlewares/validateEnv';
-import errorHandler from '../middlewares/errorHandler';
+import errorHandler from '../middlewares/errorHandler';*/
 const PORT = '3001';
 
 const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY;
@@ -14,10 +14,10 @@ const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET;
 const app = express();
 const router = express.Router();
 
-app.use(requestLogger);
-app.use(validateEnv);
+//app.use(requestLogger);
+//app.use(validateEnv);
 
-app.use(searchFlight);
+// app.use(searchFlights);
 
 export async function getAmadeusToken() {
     try {
@@ -39,7 +39,44 @@ export async function getAmadeusToken() {
     }
 }
 
-router.get('/search-flights', async (req, res) => {
+export async function searchFlights(req, res) {
+    const { departureCity, arrivalCity, departureDate } = req.query;
+
+    const token = await getAmadeusToken();
+    if (!token) {
+        return res.status(500).send('Error trying to find a token');
+    }
+
+    try {
+        const response = await fetch('https://test.api.amadeus.com/v2/shopping/flight-offers', {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                originLocationCode: departureCity,
+                destinationLocationCode: arrivalCity,
+                departureDate: departureDate,
+                adults: 1,  // example static data, adjust as needed
+            },
+        });
+
+        const data = await response.json();
+        const flights = data.data;
+
+        if (flights && flights.length > 0) {
+            const airlineRedirectUrl = flights[0].links.self;
+            return res.redirect(airlineRedirectUrl);
+        } else {
+            return res.send('No flights found.');
+        }
+    } catch (error) {
+        console.error('Error finding flights', error.message);
+        return res.status(500).send('Error fetching data!');
+    }
+}
+
+/**router.get('/search-flights', async (req, res) => {
     const { departureCity, arrivalCity, departureDate } = req.query;
 
     const token = await getAmadeusToken();
@@ -64,11 +101,11 @@ router.get('/search-flights', async (req, res) => {
         console.error('Error fetching your flights', error.message);
         res.status(500).send('Error fetching data!')
     }
-});
+});*/
 
 app.use('/api', router)
 
-app.use(errorHandler);
+//app.use(errorHandler);
 
 export default getAmadeusToken;
 

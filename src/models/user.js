@@ -1,6 +1,6 @@
 'use strict';
-const { router } = require('../routes/userRoute');
-const bcrypt = require('bcrypt');
+// import { userRoute } from '../routes/userRoute';
+import bcrypt from 'bcryptjs';
 
 const {
   Model
@@ -59,3 +59,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   return User;
 };
+
+// export User as a named export.
+export { User };

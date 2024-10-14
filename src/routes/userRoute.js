@@ -13,6 +13,7 @@ app.use(registerUser);
 app.use(userLogin);
 app.use(deleteUser);
 
+// get user according to the user id
 router.get('/user/:id', async(req, res) => {
     try {
         const userId = req.params.id;
@@ -28,6 +29,23 @@ router.get('/user/:id', async(req, res) => {
         res.status(500).send({ message: 'Server error' });
     }
 });
+
+// get user by the name
+router.get('/user', async(req, res) => {
+    try {
+        const name = req.params.name;
+        const user = await User.findOne(user.name);
+
+        if(user) {
+            res.json(user);
+        } else {
+            res.status(404).send({ message: 'OOPS!: User not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching your request', error);
+        res.status(500).send({ message: 'Server error' })
+    }
+})
 
 router.get('/user/name/:name', async(req, res) => {
     try {
@@ -108,7 +126,8 @@ router.delete('/user/:id', async(req, res) => {
         const user = await User.findByPk(userId);
 
         if(user) {
-            await user.destroy();
+            // await user.destroy();
+            const user = await User.deleteUser(); 
             res.json({ message: 'User deleted profile', user });
         } else {
             res.status(404).send({ meSsage: 'User not found' });
@@ -129,4 +148,4 @@ app.listen(PORT, error => {
     console.log(`Listening on port: ${PORT}`);
 });
 
-module.exports = router;
+export const userRoute = router;

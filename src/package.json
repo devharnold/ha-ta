@@ -2,10 +2,10 @@
   "name": "ha-ta",
   "version": "1.0.0",
   "description": "Node package for my node project",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "test": "'test_routes/**/*.js' 'test_models/**/*.js' 'test_controllers/**/*.js'"
+    "test": "mocha 'tests/test_routes/**/*.js' 'tests/test_models/**/*.js' 'tests/test_controllers/**/*.js'"
   },
   "repository": {
     "type": "git",
