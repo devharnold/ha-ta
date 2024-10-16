@@ -2,7 +2,7 @@
 import request from 'supertest';
 import express from 'express';
 import { userRoute } from '../../routes/userRoute.js'
-import { User } from '../../models/user.js';
+import User from '../../models/user.js';
 import { expect } from 'chai';
 import { authenticateUser } from '../../middlewares/authmiddleware.js'
 
@@ -10,12 +10,12 @@ const app = express();
 app.use(express.json());
 
 app.use('/user', userRoute);
-
-app.post('/get', user);
-app.post('/post', user/id);
 app.post('/put', authenticateUser);
-app.post('/delete', user/id);
 
+/**app.post('/get', user);
+app.post('/post', user/id);
+app.post('/delete', user/id);
+*/
 
 describe('User route tests', () => {
     describe('GET /user/:id', () => {

@@ -60,4 +60,3 @@ describe('User controller tests', () => {
     });
 });
 
-export { User };
