@@ -1,18 +1,15 @@
 'use strict';
-// import { userRoute } from '../routes/userRoute';
 import bcrypt from 'bcryptjs';
+import { Model, DataTypes } from 'sequelize';
 
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize) => {
   class User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate = function(models) {
+    static associate(models) {
       // define association here
       User.hasMany(models.Review, {
         foreignKey: 'userId',
@@ -22,8 +19,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userID',
         as: 'User'
       });
-    };
+    }
   }
+
   User.init({
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
@@ -32,7 +30,9 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: [8, 16] // sets a minimum of 8 and a maximum of 16 characters within the string.
+      validate: {
+        len: [8, 16] // sets a minimum of 8 and a maximum of 16 characters within the string.
+      }
     },
   }, {
     timestamps: true,
@@ -54,10 +54,20 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   });
+
   User.prototype.validatePassword = async function(password) {
     return await bcrypt.compare(password, this.password);
   }
+
   return User;
 };
 
-exports.User = User;
+export const User = (sequelize, DataTypes) => {
+  return sequelize.define('User', {
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
+    phoneNumber: DataTypes.INTEGER,
+    email: DataTypes.STRING,
+    password: DataTypes.STRING
+  });
+};
