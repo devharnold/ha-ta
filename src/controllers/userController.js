@@ -1,6 +1,6 @@
 'use strict';
 
-import { User } from '../models/user.js';
+import User from '../models/user.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -8,11 +8,11 @@ dotenv.config();
 const secretkey = process.env.JWT_SECRET;
 
 // hash Passwords
-export function hashPassword(password) {
+/**export function hashPassword(password) {
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(password, salt);
 }
-module.exports = { hashPassword };
+module.exports = { hashPassword };*/
 
 // register a User
 export async function registerUser (req, res) {
@@ -86,11 +86,4 @@ export function generateToken(user) {
     };
 
     return jwt.sign(payload, secretkey, { expiresIn: '2hrs'});
-}
-
-module.exports = {
-    registerUser,
-    userLogin,
-    deleteUser,
-    generateToken
 }

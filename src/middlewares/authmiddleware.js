@@ -16,5 +16,3 @@ export async function authenticateUser(req, res) {
         res.status(400).json({ message: 'Invalid Token' });
     }
 }
-
-exports.authenticateUser = authenticateUser;

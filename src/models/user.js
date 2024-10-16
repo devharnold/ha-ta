@@ -1,11 +1,10 @@
 'use strict';
 // import { userRoute } from '../routes/userRoute';
 import bcrypt from 'bcryptjs';
+import { Model } from 'sequelize';
 
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+
+const User = (sequelize, DataTypes) => {
   class User extends Model {
     /**
      * Helper method for defining associations.
@@ -60,4 +59,4 @@ module.exports = (sequelize, DataTypes) => {
   return User;
 };
 
-exports.User = User;
+export default User;

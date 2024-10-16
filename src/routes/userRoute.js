@@ -6,7 +6,7 @@ const app = express();
 const router = express.Router();
 // import { User } from '../models/user';
 import { registerUser, userLogin, deleteUser } from '../controllers/userController.js';
-// import { authenticateUser } from '../middlewares/authMiddleware';
+import { authenticateUser } from '../middlewares/authmiddleware.js';
 
 app.use(express.json());
 app.use(registerUser);
