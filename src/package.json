@@ -37,6 +37,7 @@
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.11.0",
+    "mysqljs": "^0.0.2-security",
     "node-fetch": "^3.3.2",
     "sequelize-cli": "^6.6.2"
   }
