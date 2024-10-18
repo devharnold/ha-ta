@@ -40,5 +40,5 @@ connection.connect((err) => {
         console.error('error connecting to mysql server' + err.stack);
         return;
     }
-    console.log('Connected to MySQL server as id: ' + connection.threadId);
+    console.log('Connected to mysql server as id: ' + connection.threadId);
 });
