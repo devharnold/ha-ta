@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET;
 
-export async function authenticateUser(req, res) {
-    const token = req.header('Authorization')?.replace('Bearer', '');
+export async function authenticateUser(req, res, next) {
+    const token = req.header('Authorization')?.replace('Bearer', '').trim();
 
-    if(!token) {
+    if (!token) {
         return res.status(401).json({ message: 'Access Denied' });
     }
 
@@ -12,7 +12,7 @@ export async function authenticateUser(req, res) {
         const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
         next();
-    } catch(error) {
+    } catch (error) {
         res.status(400).json({ message: 'Invalid Token' });
     }
 }
