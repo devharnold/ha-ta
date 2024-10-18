@@ -2,11 +2,13 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-const app = express();
-const router = express.Router();
-// import { User } from '../models/user';
 import { registerUser, userLogin, deleteUser } from '../controllers/userController.js';
 import { authenticateUser } from '../middlewares/authmiddleware.js';
+import { User } from '../models/user.js';
+import bcrypt from 'bcrypt';
+
+const app = express();
+const router = express.Router();
 
 app.use(express.json());
 app.use(registerUser);
@@ -14,12 +16,12 @@ app.use(userLogin);
 app.use(deleteUser);
 
 // get user according to the user id
-router.get('/user/:id', async(req, res) => {
+router.get('/user/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         const user = await User.findByPk(userId);
 
-        if(user) {
+        if (user) {
             res.json(user);
         } else {
             res.status(404).send({ message: 'OOPS!: User not found' });
@@ -31,23 +33,23 @@ router.get('/user/:id', async(req, res) => {
 });
 
 // get user by the name
-router.get('/user', async(req, res) => {
+router.get('/user', async (req, res) => {
     try {
         const name = req.params.name;
-        const user = await User.findOne(user.name);
+        const user = await User.findOne({ where: { name } });
 
-        if(user) {
+        if (user) {
             res.json(user);
         } else {
             res.status(404).send({ message: 'OOPS!: User not found' });
         }
     } catch (error) {
         console.error('Error fetching your request', error);
-        res.status(500).send({ message: 'Server error' })
+        res.status(500).send({ message: 'Server error' });
     }
-})
+});
 
-router.get('/user/name/:name', async(req, res) => {
+router.get('/user/name/:name', async (req, res) => {
     try {
         const username = req.params.name;
         const user = await User.findOne({ where: { name: username } });
@@ -63,11 +65,9 @@ router.get('/user/name/:name', async(req, res) => {
     }
 });
 
-router.post('/user', async(req, res) => {
+router.post('/user', async (req, res) => {
     try {
-        // const newUser = req.body;
-        // const createdUser = await User.create(newUser);
-        const { firstName, lastName, email, phoneNumber, password} = req.body;
+        const { firstName, lastName, email, phoneNumber, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await User.registerUser({ firstName, lastName, email, phoneNumber, password: hashedPassword });
@@ -78,15 +78,14 @@ router.post('/user', async(req, res) => {
     }
 });
 
-router.put('/user/:userId', authenticateUser, async(req, res) => {
+router.put('/user/:userId', authenticateUser, async (req, res) => {
     const { userId } = req.params;
-    // fields to be updated
     const { firstName, lastName, phoneNumber, password } = req.body;
-    
+
     try {
         const user = await User.findByPk(userId);
 
-        if(!user) {
+        if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
 
@@ -101,38 +100,37 @@ router.put('/user/:userId', authenticateUser, async(req, res) => {
             const hasNumber = /\d/.test(password);
 
             return isValidLength && hasUpperCase && hasLowerCase && hasNumber;
-        }
+        };
 
         if (password) {
             if (!validatePassword(password)) {
-                return res.status(400).json({ message: 'Make sure password meets requirements' })
+                return res.status(400).json({ message: 'Make sure password meets requirements' });
             }
             const saltRounds = 10;
             const hashedPassword = await bcrypt.hash(password, saltRounds);
-            user.password = hashedPassword;          
+            user.password = hashedPassword;
         }
 
         await user.save();
 
         res.json({ message: 'User updated profile', user });
-    } catch(error) {
+    } catch (error) {
         res.status(500).json({ message: 'Error', error });
     }
 });
 
-router.delete('/user/:id', async(req, res) => {
+router.delete('/user/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         const user = await User.findByPk(userId);
 
-        if(user) {
-            // await user.destroy();
-            const user = await User.deleteUser(); 
+        if (user) {
+            await user.destroy();
             res.json({ message: 'User deleted profile', user });
         } else {
-            res.status(404).send({ meSsage: 'User not found' });
+            res.status(404).send({ message: 'User not found' });
         }
-    } catch(error) {
+    } catch (error) {
         console.error('Error deleting the user', error);
         res.status(500).send({ message: 'Server error' });
     }
@@ -141,8 +139,8 @@ router.delete('/user/:id', async(req, res) => {
 const PORT = process.env.PORT || 3000;
 app.use('/api', router);
 
-app.listen(PORT, error => {
-    if(error) {
+app.listen(PORT, (error) => {
+    if (error) {
         return console.error("Error!", error);
     }
     console.log(`Listening on port: ${PORT}`);
